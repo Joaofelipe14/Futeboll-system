@@ -1,67 +1,86 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Projeto Laravel - Consumo da API de Futebol
+Este projeto foi desenvolvido em Laravel para consumir dados da Football Data API e exibir informações sobre times de futebol, como nome, ano de fundação, estádio e jogadores. O projeto segue uma estrutura MVC padrão, com a adição de um Service para separar a lógica de negócio da lógica de controle.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Estrutura do Projeto
+A estrutura do projeto é composta pelos seguintes componentes:
 
-## About Laravel
+Service: Contém a lógica de negócio, que se comunica diretamente com a API para buscar os dados.
+Controller: Recebe as requisições do usuário, chama o serviço para obter os dados e os passa para a view.
+View: Exibe os dados para o usuário na interface.
+Além disso, as imagens relacionadas aos times são armazenadas na pasta storage/app/public/prints/ e são exibidas nas views.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Instalação
+1. Clonar o Repositório
+Primeiro, clone o repositório para o seu ambiente local:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+bash
+Copiar
+composer install
+3. Configuração da API Key
+Para consumir a API da Football Data, você precisará de uma chave de API. Crie uma conta em Football Data API e obtenha sua chave.
 
-## Learning Laravel
+Adicione a chave no arquivo .env do seu projeto:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+dotenv
+Copiar
+FOOTBALL_API_KEY=sua_chave_api_aqui
+4. Configuração de Armazenamento de Imagens
+Para acessar as imagens armazenadas no diretório storage/app/public/prints/, execute o comando abaixo para criar o link simbólico necessário:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+bash
+Copiar
+php artisan storage:link
+5. Estrutura MVC
+O projeto segue a estrutura Service, Controller e View.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+a. Service (FootballService)
+O serviço é responsável por interagir diretamente com a API externa. Ele realiza as requisições HTTP e processa os dados recebidos.
 
-## Laravel Sponsors
+Localização: app/Services/FootballService.php
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+O serviço faz a requisição para a API da Football Data, utilizando a chave da API configurada no .env.
 
-### Premium Partners
+b. Controller (FootballController)
+O controlador gerencia as requisições do usuário, chamando o serviço para obter os dados do time e passando esses dados para a view.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Localização: app/Http/Controllers/FootballController.php
 
-## Contributing
+O controlador é responsável por chamar o FootballService e passar os dados para a view renderizada.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+c. View (show.blade.php)
+A view exibe os dados do time de futebol de forma estruturada na interface do usuário.
 
-## Code of Conduct
+Localização: resources/views/team/show.blade.php
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Aqui é onde você vai mostrar as informações do time, como nome, fundação, estádio, jogadores e também as imagens associadas.
 
-## Security Vulnerabilities
+Armazenamento de Imagens
+As imagens relacionadas aos times de futebol estão armazenadas na pasta storage/app/public/prints/. Para exibir as imagens corretamente, o Laravel cria um link simbólico com o comando:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+bash
+Copiar
+php artisan storage:link
+Depois de rodar esse comando, as imagens podem ser acessadas pela URL pública, como mostrado abaixo:
 
-## License
+Exemplo de Imagens
+Imagem 1:
+Imagem 2:
+Imagem 3:
+Exemplo de Uso
+Para acessar os detalhes de um time, basta usar a URL no seguinte formato:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# Futeboll-system
+arduino
+Copiar
+http://localhost/team/{teamId}
+Substitua {teamId} pelo ID do time que deseja consultar. O controlador irá buscar os dados desse time através do FootballService e exibi-los na view.
+
+Contribuindo
+Faça o fork do repositório.
+Crie uma branch (git checkout -b feature/nova-funcionalidade).
+Faça suas alterações e commit (git commit -am 'Adicionando nova funcionalidade').
+Envie para o repositório remoto (git push origin feature/nova-funcionalidade).
+Crie um Pull Request.
+Licença
+Este projeto está licenciado sob a Licença MIT - veja o arquivo LICENSE para mais detalhes.
+
